@@ -1,24 +1,41 @@
-import { auth } from "./firebase-config.js";
-import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const input_username = document.querySelector("#username");
+const input_email = document.querySelector("#email");
+const input_password = document.querySelector("#password");
+const input_confirm_password = document.querySelector("#cf-password");
+const form = document.querySelector("#register-form");
 
-let form = document.querySelector("form");
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-    let username = document.getElementById("username").value.trim();
-    let email = document.getElementById("email").value.trim();
-    let password = document.getElementById("password").value.trim();
+  // Lấy ra thông tin trên các ô input
+  let username = input_username.value;
+  let email = input_email.value;
+  let password = input_password.value;
+  let confirm_password = input_confirm_password.value;
 
-    try {
-        
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(userCredential.user, { displayName: username });
-        
+  if (password != confirm_password) {
+    alert("Password is not match");
+  }
 
-        alert("create account successful please login");   
-        location.href = "login.html";                      
-
-    } catch (error) {
-        alert("Lỗi: " + error.message);  
-    }
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signed in
+      var user = userCredential.user;
+      return firebase.firestore().collection("users").doc(user.uid).set({
+        username: username,
+        email: email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => {
+      alert("Sign up successfully!!!");
+      window.location.href = "/index.html";
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(error.message);
+    });
 });

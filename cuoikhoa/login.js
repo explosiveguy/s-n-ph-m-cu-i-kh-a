@@ -1,31 +1,27 @@
-import { auth } from "./firebase-config.js";
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const input_email = document.querySelector("#email");
+const input_password = document.querySelector("#password");
+const login_form = document.querySelector("#login-form");
 
-let form = document.querySelector("form");
-form.addEventListener("submit", async (e) => {   // thêm async
-    e.preventDefault();
+function login(event) {
+  event.preventDefault();
 
-    let email = document.getElementById("email");
-    let password = document.getElementById("password");
+  let email = input_email.value;
+  let password = input_password.value;
 
-    try {
-        // ---- THAY localStorage bằng Firebase ----
-        const userCredential = await signInWithEmailAndPassword(
-            auth,
-            email.value.trim(),
-            password.value.trim()
-        );
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signed in
+      var user = userCredential.user;
+      alert("Login successfully");
+      window.location.href = "./index.html";
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(error.message);
+    });
+}
 
-        const existing_user = {
-            uid: userCredential.user.uid,
-            email: userCredential.user.email
-        };
-
-        localStorage.setItem("current_user", JSON.stringify(existing_user)); // giữ nguyên dòng này
-        location.href = "index.html"; // giữ nguyên dòng này
-        // -----------------------------------------
-
-    } catch (error) {
-        alert("username or password is incorrect"); // giữ nguyên thông báo lỗi
-    }
-});
+login_form.addEventListener("submit", login);
