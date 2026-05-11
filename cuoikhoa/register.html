@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -22,6 +22,10 @@
           <input id="password" type="password" required />
           <label>Password</label>
         </div>
+        <div class="form-control">
+          <input id="cf-password" type="password" required />
+          <label>Confirm password</label>
+        </div>
         <button type="submit">Sign Up</button>
         <div class="form-help">
           <div class="remember-me">
@@ -32,10 +36,10 @@
       </form>
       <p>Already have an account? <a href="login.html">Sign in now</a></p>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="./firebase-config.js"></script>
+    <script src="register.js"></script>
   </body>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="./firebase-config.js"></script>
-<script src="register.js"></script>
 </html>
